@@ -1,0 +1,31 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Procesamiento del Lenguaje Natural - Jarvis Calling Contest
+author: Nicolás Rodríguez
+logo: logo.png
+
+# Ejecutar notebooks solo si cambian (más rápido que 'force')
+execute:
+  execute_notebooks: auto
+
+# Nombre del archivo PDF si deseas exportarlo
+latex:
+  latex_documents:
+    targetname: nlp_project_book.tex
+
+# Archivo de bibliografía
+bibtex_bibfiles:
+  - references.bib
+
+# Información del repositorio (para botones en la parte superior)
+repository:
+  url: https://github.com/nicoplayz58/jarvis-nlp-book  # Cambia a tu repo real
+  path_to_book: .  # Deja punto si el libro está en la raíz del repo
+  branch: main     # Usa 'main' (o la rama que tengas)
+
+# Configuración de los botones de GitHub
+html:
+  use_issues_button: true
+  use_repository_button: true
+  extra_footer: "<p>© 2025 Nicolás Rodríguez. Proyecto Jarvis Calling NLP Contest.</p>"
