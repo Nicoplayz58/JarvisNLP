@@ -1,0 +1,1433 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Exploratory Data Analysis &#8212; Procesamiento del Lenguaje Natural - Jarvis Calling Contest</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'eda';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modelo: Transformers (DistilBERT o RoBERTa)" href="DistilBERT.html" />
+    <link rel="prev" title="Procesamiento del Lenguaje Natural: Jarvis Calling Hiring Contest" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Procesamiento del Lenguaje Natural - Jarvis Calling Contest - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Procesamiento del Lenguaje Natural - Jarvis Calling Contest - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Procesamiento del Lenguaje Natural: Jarvis Calling Hiring Contest
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DistilBERT.html">Modelo: Transformers (DistilBERT o RoBERTa)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TF_models.html">W2V + BilSTM</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Resultados.html">Interpretación general</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/nicoplayz58/jarvis-nlp-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/nicoplayz58/jarvis-nlp-book/issues/new?title=Issue%20on%20page%20%2Feda.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/eda.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Exploratory Data Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="exploratory-data-analysis">
+<h1>Exploratory Data Analysis<a class="headerlink" href="#exploratory-data-analysis" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span>  <span class="c1"># PyMuPDF</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="c1"># === RUTAS ===</span>
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest&quot;</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">RESUME_CSV_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;Resume&quot;</span><span class="p">,</span> <span class="s2">&quot;Resume.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># === 1. Extraer texto de PDFs ===</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_text_from_pdf</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">doc</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="n">page</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="c1"># === 2. Limpieza básica ===</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>  <span class="c1"># reemplaza múltiples espacios/saltos</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\x00-\x7F]+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>  <span class="c1"># elimina caracteres no ASCII</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># === 3. Recorrer todas las carpetas dentro de data ===</span>
+<span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extrayendo texto de los PDFs...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">)):</span>
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">):</span>
+                <span class="n">pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">extract_text_from_pdf</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span>
+                    <span class="n">clean</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">folder</span><span class="p">,</span>
+                        <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">file</span><span class="p">,</span>
+                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">clean</span>
+                    <span class="p">})</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error procesando </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">df_pdfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Total de archivos PDF procesados: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_pdfs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_pdfs</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># === 4. Calcular métricas básicas ===</span>
+<span class="n">df_pdfs</span><span class="p">[</span><span class="s2">&quot;num_chars&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_pdfs</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+<span class="n">df_pdfs</span><span class="p">[</span><span class="s2">&quot;num_words&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_pdfs</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+
+<span class="c1"># === 5. Cargar CSV original (si existe) ===</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">RESUME_CSV_PATH</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Cargando Resume.csv...&quot;</span><span class="p">)</span>
+    <span class="n">df_resume</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESUME_CSV_PATH</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Columnas del CSV original: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">df_resume</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># unir si hay columna compatible (usa &#39;Category&#39; o similar)</span>
+    <span class="k">if</span> <span class="s2">&quot;Category&quot;</span> <span class="ow">in</span> <span class="n">df_resume</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df_final</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_pdfs</span><span class="p">,</span> <span class="n">df_resume</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;Category&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_pdfs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️ No se encontró columna &#39;Category&#39; para unir. Se deja el dataset solo con PDFs.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️ No se encontró Resume.csv. Solo se usará el texto de los PDFs.&quot;</span><span class="p">)</span>
+    <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_pdfs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># === 6. Guardar dataset consolidado ===</span>
+<span class="n">OUTPUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;dataset_consolidado.csv&quot;</span><span class="p">)</span>
+<span class="n">df_final</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💾 Dataset consolidado guardado en:</span><span class="se">\n</span><span class="si">{</span><span class="n">OUTPUT_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># === 7. Resumen ===</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resumen general:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_final</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)[[</span><span class="s2">&quot;num_words&quot;</span><span class="p">,</span> <span class="s2">&quot;num_chars&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span>  <span class="c1"># PyMuPDF</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;fitz&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\dataset_consolidado.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>filename</th>
+      <th>text</th>
+      <th>num_chars</th>
+      <th>num_words</th>
+      <th>ID</th>
+      <th>Resume_str</th>
+      <th>Resume_html</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>15906625</td>
+      <td>ACCOUNTANT       Professional Summary...</td>
+      <td>&lt;div class="fontsize fontface vmargins hmargin...</td>
+      <td>ACCOUNTANT</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>30361788</td>
+      <td>ACCOUNTANT       Summary      Innovat...</td>
+      <td>&lt;div class="fontsize fontface vmargins hmargin...</td>
+      <td>ACCOUNTANT</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>21031285</td>
+      <td>ACCOUNTANT         Highlights        ...</td>
+      <td>&lt;div class="fontsize fontface vmargins hmargin...</td>
+      <td>ACCOUNTANT</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>25749150</td>
+      <td>ACCOUNTANT           Professional Sum...</td>
+      <td>&lt;div class="fontsize fontface vmargins hmargin...</td>
+      <td>ACCOUNTANT</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>12338274</td>
+      <td>ACCOUNTANT       Summary    To pursue...</td>
+      <td>&lt;div class="fontsize fontface vmargins hmargin...</td>
+      <td>ACCOUNTANT</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;num_chars&#39;</span><span class="p">,</span> <span class="s1">&#39;num_words&#39;</span><span class="p">]</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols_keep</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Quitar duplicados por texto o filename</span>
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">df_clean</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">df_clean</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2482, 5)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>filename</th>
+      <th>text</th>
+      <th>num_chars</th>
+      <th>num_words</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+    </tr>
+    <tr>
+      <th>118</th>
+      <td>ACCOUNTANT</td>
+      <td>10674770.pdf</td>
+      <td>STAFF ACCOUNTANT Summary Highly analytical and...</td>
+      <td>7473</td>
+      <td>1042</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>ACCOUNTANT</td>
+      <td>11163645.pdf</td>
+      <td>ACCOUNTANT Professional Summary To obtain a po...</td>
+      <td>4721</td>
+      <td>621</td>
+    </tr>
+    <tr>
+      <th>354</th>
+      <td>ACCOUNTANT</td>
+      <td>11759079.pdf</td>
+      <td>SENIOR ACCOUNTANT Experience Company Name June...</td>
+      <td>5917</td>
+      <td>849</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>ACCOUNTANT</td>
+      <td>12065211.pdf</td>
+      <td>SENIOR ACCOUNTANT Professional Summary Senior ...</td>
+      <td>5555</td>
+      <td>782</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">base_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\resume&quot;</span>
+
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">base_path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> ===&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Resume.csv ===
+(2484, 4)
+Index([&#39;ID&#39;, &#39;Resume_str&#39;, &#39;Resume_html&#39;, &#39;Category&#39;], dtype=&#39;object&#39;)
+         ID                                         Resume_str  \
+0  16852973           HR ADMINISTRATOR/MARKETING ASSOCIATE\...   
+1  22323967           HR SPECIALIST, US HR OPERATIONS      ...   
+
+                                         Resume_html Category  
+0  &lt;div class=&quot;fontsize fontface vmargins hmargin...       HR  
+1  &lt;div class=&quot;fontsize fontface vmargins hmargin...       HR  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;category&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/4d83f528eae4d66001522c881bf6308a3a4f166675c227dc162aa8ef2f396d1f.png" src="_images/4d83f528eae4d66001522c881bf6308a3a4f166675c227dc162aa8ef2f396d1f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>wordcloud
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting wordcloud
+  Downloading wordcloud-1.9.4-cp313-cp313-win_amd64.whl.metadata (3.5 kB)
+Requirement already satisfied: numpy&gt;=1.6.1 in c:\users\nicog\anaconda3\lib\site-packages (from wordcloud) (2.1.3)
+Requirement already satisfied: pillow in c:\users\nicog\anaconda3\lib\site-packages (from wordcloud) (11.1.0)
+Requirement already satisfied: matplotlib in c:\users\nicog\anaconda3\lib\site-packages (from wordcloud) (3.10.0)
+Requirement already satisfied: contourpy&gt;=1.0.1 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (1.3.1)
+Requirement already satisfied: cycler&gt;=0.10 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (0.11.0)
+Requirement already satisfied: fonttools&gt;=4.22.0 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (4.55.3)
+Requirement already satisfied: kiwisolver&gt;=1.3.1 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (1.4.8)
+Requirement already satisfied: packaging&gt;=20.0 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (24.2)
+Requirement already satisfied: pyparsing&gt;=2.3.1 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (3.2.0)
+Requirement already satisfied: python-dateutil&gt;=2.7 in c:\users\nicog\anaconda3\lib\site-packages (from matplotlib-&gt;wordcloud) (2.9.0.post0)
+Requirement already satisfied: six&gt;=1.5 in c:\users\nicog\anaconda3\lib\site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib-&gt;wordcloud) (1.17.0)
+Downloading wordcloud-1.9.4-cp313-cp313-win_amd64.whl (300 kB)
+Installing collected packages: wordcloud
+Successfully installed wordcloud-1.9.4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nltk.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nltk</span><span class="w"> </span><span class="kn">import</span> <span class="n">tokenize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wordcloud</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordCloud</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;stopwords&#39;</span><span class="p">)</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package stopwords to
+[nltk_data]     C:\Users\nicog\AppData\Roaming\nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package punkt to
+[nltk_data]     C:\Users\nicog\AppData\Roaming\nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;http\S+|www\S+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">clean_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt_tab&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package punkt_tab to
+[nltk_data]     C:\Users\nicog\AppData\Roaming\nltk_data...
+[nltk_data]   Package punkt_tab is already up-to-date!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mean word length</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;mean_word_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">txt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">txt</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">txt</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="c1"># Mean sentence length</span>
+<span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;mean_sent_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">txt</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">sent_tokenize</span><span class="p">(</span><span class="n">txt</span><span class="p">)])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="n">df_clean</span><span class="p">[[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span><span class="s1">&#39;num_words&#39;</span><span class="p">,</span><span class="s1">&#39;mean_word_length&#39;</span><span class="p">,</span><span class="s1">&#39;mean_sent_length&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>num_words</th>
+      <th>mean_word_length</th>
+      <th>mean_sent_length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCOUNTANT</td>
+      <td>3466</td>
+      <td>7.639434</td>
+      <td>18928.0</td>
+    </tr>
+    <tr>
+      <th>118</th>
+      <td>ACCOUNTANT</td>
+      <td>1042</td>
+      <td>7.264507</td>
+      <td>6123.0</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>ACCOUNTANT</td>
+      <td>621</td>
+      <td>7.448852</td>
+      <td>4046.0</td>
+    </tr>
+    <tr>
+      <th>354</th>
+      <td>ACCOUNTANT</td>
+      <td>849</td>
+      <td>7.067454</td>
+      <td>4783.0</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>ACCOUNTANT</td>
+      <td>782</td>
+      <td>7.216458</td>
+      <td>4592.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">visualize</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_clean</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> por categoría&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;num_words&#39;</span><span class="p">,</span><span class="s1">&#39;mean_word_length&#39;</span><span class="p">,</span><span class="s1">&#39;mean_sent_length&#39;</span><span class="p">]:</span>
+    <span class="n">visualize</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/cadb5d707961a9376de126015f3cfb221ae292f7d6d7b105f12c252507c65db3.png" src="_images/cadb5d707961a9376de126015f3cfb221ae292f7d6d7b105f12c252507c65db3.png" />
+<img alt="_images/2aabcd2a85ccc061be8c58bc6ed3b278aefa2cfc3f07ad27a789cb450f415617.png" src="_images/2aabcd2a85ccc061be8c58bc6ed3b278aefa2cfc3f07ad27a789cb450f415617.png" />
+<img alt="_images/db2ecf4dd6fb9907ec16da3ba7ab6299a06bea3dbbcd3dc18bf69d40b53459a7.png" src="_images/db2ecf4dd6fb9907ec16da3ba7ab6299a06bea3dbbcd3dc18bf69d40b53459a7.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="n">most_common</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">words</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">most_common</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Top 20 palabras más frecuentes en todos los currículums&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/907fcece2580dc6b43f12da3e3d8a7bdc70400edf95500c5052199ba33bcf6ab.png" src="_images/907fcece2580dc6b43f12da3e3d8a7bdc70400edf95500c5052199ba33bcf6ab.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bigramas</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">bigrams</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">])</span>
+<span class="n">count_values</span> <span class="o">=</span> <span class="n">bigrams</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bigram_freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([(</span><span class="n">count_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">vocabulary_</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span><span class="s1">&#39;ngram&#39;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">bigram_freq</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">bigram_freq</span><span class="p">[</span><span class="s1">&#39;ngram&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Top 15 Bigramas más frecuentes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Trigramas</span>
+<span class="n">cv3</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">trigrams</span> <span class="o">=</span> <span class="n">cv3</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">])</span>
+<span class="n">count_values3</span> <span class="o">=</span> <span class="n">trigrams</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">trigram_freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([(</span><span class="n">count_values3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">cv3</span><span class="o">.</span><span class="n">vocabulary_</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span><span class="s1">&#39;ngram&#39;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">trigram_freq</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">trigram_freq</span><span class="p">[</span><span class="s1">&#39;ngram&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Top 15 Trigramas más frecuentes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/dab19e3007638d5ea6047edec97f76fdec1cbe33b987a8066689d5a21d8c9aa0.png" src="_images/dab19e3007638d5ea6047edec97f76fdec1cbe33b987a8066689d5a21d8c9aa0.png" />
+<img alt="_images/8c4bc7e96ce3b671320b24b0656617d8942f1bf5e655303dfff3bd30530a13c8.png" src="_images/8c4bc7e96ce3b671320b24b0656617d8942f1bf5e655303dfff3bd30530a13c8.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wc</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Word Cloud de currículums&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ba2ec27d957ff95a949f63d502504d9681ceddd2b85a85e23ecafd61b0df947b.png" src="_images/ba2ec27d957ff95a949f63d502504d9681ceddd2b85a85e23ecafd61b0df947b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\dataset_EDA_completo.csv&quot;</span>
+<span class="n">df_clean</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Dataset con métricas EDA guardado en:</span><span class="se">\n</span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ Dataset con métricas EDA guardado en:
+C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\dataset_EDA_completo.csv
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df_clean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\dataset_EDA_completo.csv&quot;</span><span class="p">)</span>
+<span class="n">df_clean</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>filename</th>
+      <th>text</th>
+      <th>num_chars</th>
+      <th>num_words</th>
+      <th>clean_text</th>
+      <th>mean_word_length</th>
+      <th>mean_sent_length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCOUNTANT</td>
+      <td>10554236.pdf</td>
+      <td>ACCOUNTANT Summary Financial Accountant specia...</td>
+      <td>24149</td>
+      <td>3466</td>
+      <td>accountant summary financial accountant specia...</td>
+      <td>7.639434</td>
+      <td>18928.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ACCOUNTANT</td>
+      <td>10674770.pdf</td>
+      <td>STAFF ACCOUNTANT Summary Highly analytical and...</td>
+      <td>7473</td>
+      <td>1042</td>
+      <td>staff accountant summary highly analytical det...</td>
+      <td>7.264507</td>
+      <td>6123.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ACCOUNTANT</td>
+      <td>11163645.pdf</td>
+      <td>ACCOUNTANT Professional Summary To obtain a po...</td>
+      <td>4721</td>
+      <td>621</td>
+      <td>accountant professional summary obtain positio...</td>
+      <td>7.448852</td>
+      <td>4046.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ACCOUNTANT</td>
+      <td>11759079.pdf</td>
+      <td>SENIOR ACCOUNTANT Experience Company Name June...</td>
+      <td>5917</td>
+      <td>849</td>
+      <td>senior accountant experience company name june...</td>
+      <td>7.067454</td>
+      <td>4783.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ACCOUNTANT</td>
+      <td>12065211.pdf</td>
+      <td>SENIOR ACCOUNTANT Professional Summary Senior ...</td>
+      <td>5555</td>
+      <td>782</td>
+      <td>senior accountant professional summary senior ...</td>
+      <td>7.216458</td>
+      <td>4592.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+
+<span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">tfidf</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">])</span>
+
+<span class="n">tfidf_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">tfidf</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">df_clean</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cat</span>
+    <span class="n">cat_mean</span> <span class="o">=</span> <span class="n">tfidf_df</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">cat</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cat_mean</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ACCOUNTANT → accounting, financial, accountant, accounts, tax, ledger, payroll, statements, monthly, state
+
+ADVOCATE → customer, advocate, state, city, service, company, care, patient, health, patients
+
+AGRICULTURE → agriculture, state, city, research, company, management, program, students, data, project
+
+APPAREL → sales, store, state, city, company, customer, apparel, product, merchandising, merchandise
+
+ARTS → students, arts, state, city, school, student, teacher, company, art, customer
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>deep-translator<span class="w"> </span>tqdm
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting deep-translator
+  Downloading deep_translator-1.11.4-py3-none-any.whl.metadata (30 kB)
+Requirement already satisfied: tqdm in c:\users\nicog\anaconda3\lib\site-packages (4.67.1)
+Requirement already satisfied: beautifulsoup4&lt;5.0.0,&gt;=4.9.1 in c:\users\nicog\anaconda3\lib\site-packages (from deep-translator) (4.12.3)
+Requirement already satisfied: requests&lt;3.0.0,&gt;=2.23.0 in c:\users\nicog\anaconda3\lib\site-packages (from deep-translator) (2.32.3)
+Requirement already satisfied: soupsieve&gt;1.2 in c:\users\nicog\anaconda3\lib\site-packages (from beautifulsoup4&lt;5.0.0,&gt;=4.9.1-&gt;deep-translator) (2.5)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in c:\users\nicog\anaconda3\lib\site-packages (from requests&lt;3.0.0,&gt;=2.23.0-&gt;deep-translator) (3.3.2)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in c:\users\nicog\anaconda3\lib\site-packages (from requests&lt;3.0.0,&gt;=2.23.0-&gt;deep-translator) (3.7)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in c:\users\nicog\anaconda3\lib\site-packages (from requests&lt;3.0.0,&gt;=2.23.0-&gt;deep-translator) (2.3.0)
+Requirement already satisfied: certifi&gt;=2017.4.17 in c:\users\nicog\anaconda3\lib\site-packages (from requests&lt;3.0.0,&gt;=2.23.0-&gt;deep-translator) (2025.10.5)
+Requirement already satisfied: colorama in c:\users\nicog\anaconda3\lib\site-packages (from tqdm) (0.4.6)
+Downloading deep_translator-1.11.4-py3-none-any.whl (42 kB)
+Installing collected packages: deep-translator
+Successfully installed deep-translator-1.11.4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">deep_translator</span><span class="w"> </span><span class="kn">import</span> <span class="n">GoogleTranslator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">back_translate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">source_lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">mid_lang</span><span class="o">=</span><span class="s1">&#39;fr&#39;</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">inter</span> <span class="o">=</span> <span class="n">GoogleTranslator</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source_lang</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">mid_lang</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GoogleTranslator</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">mid_lang</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">source_lang</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">inter</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_clean</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;category&#39;, &#39;filename&#39;, &#39;num_chars&#39;, &#39;num_words&#39;, &#39;clean_text&#39;,
+       &#39;mean_word_length&#39;, &#39;mean_sent_length&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target_size</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>  <span class="c1"># 120</span>
+
+<span class="n">minor_classes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AGRICULTURE&quot;</span><span class="p">,</span> <span class="s2">&quot;AUTOMOBILE&quot;</span><span class="p">,</span> <span class="s2">&quot;BPO&quot;</span><span class="p">]</span>
+<span class="n">augmented_rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">minor_classes</span><span class="p">:</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cat</span><span class="p">]</span>
+    <span class="n">needed</span> <span class="o">=</span> <span class="n">target_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Augmenting </span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">: necesito </span><span class="si">{</span><span class="n">needed</span><span class="si">}</span><span class="s2"> nuevos ejemplos&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">needed</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Augmenting </span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">new_text</span> <span class="o">=</span> <span class="n">back_translate</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">])</span>
+        <span class="n">augmented_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;clean_text&#39;</span><span class="p">:</span> <span class="n">new_text</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="n">cat</span><span class="p">})</span>
+
+<span class="n">df_aug</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">augmented_rows</span><span class="p">)</span>
+<span class="n">df_balanced</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_clean</span><span class="p">,</span> <span class="n">df_aug</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting AGRICULTURE: necesito 57 nuevos ejemplos
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting AGRICULTURE: 100%|██████████████████████████████████████████████████████████| 57/57 [00:15&lt;00:00,  3.60it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting AUTOMOBILE: necesito 84 nuevos ejemplos
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting AUTOMOBILE: 100%|███████████████████████████████████████████████████████████| 84/84 [00:28&lt;00:00,  2.97it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting BPO: necesito 98 nuevos ejemplos
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Augmenting BPO: 100%|██████████████████████████████████████████████████████████████████| 98/98 [00:16&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución antes del aumento:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Distribución después del aumento:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_balanced</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Distribución antes del aumento:
+category
+INFORMATION-TECHNOLOGY    120
+BUSINESS-DEVELOPMENT      120
+ACCOUNTANT                118
+ADVOCATE                  118
+CHEF                      118
+ENGINEERING               118
+FITNESS                   117
+FINANCE                   117
+SALES                     116
+AVIATION                  116
+HEALTHCARE                115
+CONSULTANT                115
+BANKING                   115
+CONSTRUCTION              112
+PUBLIC-RELATIONS          111
+HR                        110
+DESIGNER                  107
+ARTS                      103
+TEACHER                   102
+APPAREL                    97
+DIGITAL-MEDIA              96
+AGRICULTURE                63
+AUTOMOBILE                 36
+BPO                        22
+Name: count, dtype: int64
+
+Distribución después del aumento:
+category
+AGRICULTURE               120
+AUTOMOBILE                120
+BUSINESS-DEVELOPMENT      120
+BPO                       120
+INFORMATION-TECHNOLOGY    120
+CHEF                      118
+ADVOCATE                  118
+ACCOUNTANT                118
+ENGINEERING               118
+FINANCE                   117
+FITNESS                   117
+AVIATION                  116
+SALES                     116
+HEALTHCARE                115
+BANKING                   115
+CONSULTANT                115
+CONSTRUCTION              112
+PUBLIC-RELATIONS          111
+HR                        110
+DESIGNER                  107
+ARTS                      103
+TEACHER                   102
+APPAREL                    97
+DIGITAL-MEDIA              96
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_balanced</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s2">&quot;C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest\dataset_EDA_completo.csv&quot;</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Archivo actualizado guardado correctamente (sin columna &#39;text&#39;).&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ Archivo actualizado guardado correctamente (sin columna &#39;text&#39;).
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Procesamiento del Lenguaje Natural: Jarvis Calling Hiring Contest</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="DistilBERT.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Modelo: Transformers (DistilBERT o RoBERTa)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Nicolás Rodríguez
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>© 2025 Nicolás Rodríguez. Proyecto Jarvis Calling NLP Contest.</p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

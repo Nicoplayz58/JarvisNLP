@@ -1,0 +1,113 @@
+Traceback (most recent call last):
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/nicoplayz/tf312/lib/python3.12/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import os
+import pandas as pd
+import fitz  # PyMuPDF
+import re
+from tqdm import tqdm
+
+# === RUTAS ===
+BASE_DIR = r"C:\Users\nicog\Documents\Deep Learning\LLM\Jarvis Calling Hiring Contest"
+DATA_DIR = os.path.join(BASE_DIR, "data")
+RESUME_CSV_PATH = os.path.join(BASE_DIR, "Resume", "Resume.csv")
+
+# === 1. Extraer texto de PDFs ===
+def extract_text_from_pdf(pdf_path):
+    text = ""
+    with fitz.open(pdf_path) as doc:
+        for page in doc:
+            text += page.get_text("text")
+    return text
+
+# === 2. Limpieza básica ===
+def clean_text(text):
+    text = re.sub(r'\s+', ' ', text)  # reemplaza múltiples espacios/saltos
+    text = re.sub(r'[^\x00-\x7F]+', '', text)  # elimina caracteres no ASCII
+    return text.strip()
+
+# === 3. Recorrer todas las carpetas dentro de data ===
+records = []
+print("Extrayendo texto de los PDFs...\n")
+
+for folder in tqdm(os.listdir(DATA_DIR)):
+    folder_path = os.path.join(DATA_DIR, folder)
+    if os.path.isdir(folder_path):
+        for file in os.listdir(folder_path):
+            if file.endswith(".pdf"):
+                pdf_path = os.path.join(folder_path, file)
+                try:
+                    text = extract_text_from_pdf(pdf_path)
+                    clean = clean_text(text)
+                    records.append({
+                        "category": folder,
+                        "filename": file,
+                        "text": clean
+                    })
+                except Exception as e:
+                    print(f"❌ Error procesando {file}: {e}")
+
+df_pdfs = pd.DataFrame(records)
+print(f"\n✅ Total de archivos PDF procesados: {len(df_pdfs)}")
+print(df_pdfs.head())
+
+# === 4. Calcular métricas básicas ===
+df_pdfs["num_chars"] = df_pdfs["text"].apply(len)
+df_pdfs["num_words"] = df_pdfs["text"].apply(lambda x: len(x.split()))
+
+# === 5. Cargar CSV original (si existe) ===
+if os.path.exists(RESUME_CSV_PATH):
+    print("\nCargando Resume.csv...")
+    df_resume = pd.read_csv(RESUME_CSV_PATH)
+    print(f"Columnas del CSV original: {list(df_resume.columns)}")
+
+    # unir si hay columna compatible (usa 'Category' o similar)
+    if "Category" in df_resume.columns:
+        df_final = pd.merge(df_pdfs, df_resume, left_on="category", right_on="Category", how="left")
+    else:
+        df_final = df_pdfs.copy()
+        print("⚠️ No se encontró columna 'Category' para unir. Se deja el dataset solo con PDFs.")
+else:
+    print("\n⚠️ No se encontró Resume.csv. Solo se usará el texto de los PDFs.")
+    df_final = df_pdfs.copy()
+
+# === 6. Guardar dataset consolidado ===
+OUTPUT_PATH = os.path.join(BASE_DIR, "dataset_consolidado.csv")
+df_final.to_csv(OUTPUT_PATH, index=False, encoding="utf-8")
+print(f"\n💾 Dataset consolidado guardado en:\n{OUTPUT_PATH}")
+
+# === 7. Resumen ===
+print("\nResumen general:")
+print(df_final.groupby("category")[["num_words", "num_chars"]].mean().round(1))
+
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mModuleNotFoundError[39m                       Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[1][39m[32m, line 3[39m
+[32m      1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mos[39;00m
+[32m      2[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mpd[39;00m
+[32m----> [39m[32m3[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mfitz[39;00m  [38;5;66;03m# PyMuPDF[39;00m
+[32m      4[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mre[39;00m
+[32m      5[39m [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mtqdm[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m tqdm
+
+[31mModuleNotFoundError[39m: No module named 'fitz'
+
